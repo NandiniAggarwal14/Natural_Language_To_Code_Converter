@@ -8,105 +8,168 @@
   </head>
   <body>
     <main class="page">
-      <section class="hero">
-        <p class="eyebrow">Rule-Based Pipeline</p>
+      <header class="topbar">
         <h1>Natural Language to Code Converter</h1>
-        <p class="lede">Describe a simple operation and see each analysis phase.</p>
-      </section>
+      </header>
 
-      <section class="panel">
-        <label for="sentence">Enter a request</label>
-        <div class="input-row">
-          <input id="sentence" type="text" placeholder="add x and 5" />
-          <button id="submit">Process</button>
-        </div>
-        <p class="hint">Examples: "print total", "if x greater than 10", "loop 3 times"</p>
-      </section>
-
-      <section class="tabs">
-        <div class="tab-list" role="tablist">
-          <button class="tab-button is-active" data-tab="lexical" role="tab">Phase 1</button>
-          <button class="tab-button" data-tab="syntax" role="tab">Phase 2</button>
-          <button class="tab-button" data-tab="semantic" role="tab">Phase 3</button>
-          <button class="tab-button" data-tab="intent" role="tab">Phase 4</button>
-          <button class="tab-button" data-tab="ir" role="tab">Phase 5</button>
-          <button class="tab-button" data-tab="code" role="tab">Phase 6</button>
-        </div>
-
-        <div class="tab-panels">
-          <article class="tab-panel is-active" data-panel="lexical" role="tabpanel">
-            <header>
-              <p class="step-number">Phase 1</p>
-              <h2>Lexical Analysis</h2>
-              <p class="step-note">Lowercase, remove punctuation, tokenize, and classify.</p>
-            </header>
-            <div class="step-body">
-              <div>
-                <h3>Preprocessed Text</h3>
-                <pre id="preprocessed">""</pre>
-              </div>
-              <div>
-                <h3>Tokens &amp; Types</h3>
-                <pre id="tokens">[]</pre>
-              </div>
+      <section class="workspace-layout">
+        <section class="pipeline-pane">
+          <section class="panel">
+            <label for="sentence">Enter a natural language command</label>
+            <div class="input-row">
+              <input id="sentence" type="text" placeholder="add 4 and 5" />
+              <button id="submit" type="button">Process</button>
             </div>
-          </article>
+          </section>
 
-          <article class="tab-panel" data-panel="syntax" role="tabpanel" hidden>
-            <header>
-              <p class="step-number">Phase 2</p>
-              <h2>Syntax Analysis</h2>
-              <p class="step-note">Validate the token sequence against grammar rules.</p>
-            </header>
-            <div class="step-body">
-              <pre id="syntax">{}</pre>
+          <section class="tabs">
+            <div class="tab-list" role="tablist">
+              <button class="tab-button is-active" data-tab="lexical" role="tab" aria-selected="true">Lexical Analysis</button>
+              <button class="tab-button" data-tab="syntax" role="tab" aria-selected="false">Syntax Analysis</button>
+              <button class="tab-button" data-tab="semantic" role="tab" aria-selected="false">Semantic Analysis</button>
+              <button class="tab-button" data-tab="intent" role="tab" aria-selected="false">Intent &amp; Entities</button>
+              <button class="tab-button" data-tab="ir" role="tab" aria-selected="false">IR</button>
+              <button class="tab-button" data-tab="code" role="tab" aria-selected="false">Code Generation</button>
             </div>
-          </article>
 
-          <article class="tab-panel" data-panel="semantic" role="tabpanel" hidden>
-            <header>
-              <p class="step-number">Phase 3</p>
-              <h2>Semantic Analysis</h2>
-              <p class="step-note">Check logical correctness and operand consistency.</p>
-            </header>
-            <div class="step-body">
-              <pre id="semantic">{}</pre>
-            </div>
-          </article>
+            <div class="tab-panels">
+              <article class="tab-panel is-active" data-panel="lexical" role="tabpanel">
+                <header>
+                  <h2>Lexical Analysis</h2>
+                </header>
+                <div class="step-body">
+                  <div>
+                    <h3>Preprocessed Text</h3>
+                    <pre id="preprocessed">""</pre>
+                  </div>
+                  <div>
+                    <h3>Tokens &amp; Types</h3>
+                    <pre id="tokens">[]</pre>
+                  </div>
+                </div>
+              </article>
 
-          <article class="tab-panel" data-panel="intent" role="tabpanel" hidden>
-            <header>
-              <p class="step-number">Phase 4</p>
-              <h2>Intent &amp; Entity Extraction</h2>
-              <p class="step-note">Derive intent and extract variables and numbers.</p>
-            </header>
-            <div class="step-body">
-              <pre id="intent">{}</pre>
-            </div>
-          </article>
+              <article class="tab-panel" data-panel="syntax" role="tabpanel" hidden>
+                <header>
+                  <h2>Syntax Analysis</h2>
+                </header>
+                <div class="step-body">
+                  <pre id="syntax">{}</pre>
+                </div>
+              </article>
 
-          <article class="tab-panel" data-panel="ir" role="tabpanel" hidden>
-            <header>
-              <p class="step-number">Phase 5</p>
-              <h2>Intermediate Representation (IR)</h2>
-              <p class="step-note">Language-agnostic instructions derived from intent.</p>
-            </header>
-            <div class="step-body">
-              <pre id="ir">{}</pre>
-            </div>
-          </article>
+              <article class="tab-panel" data-panel="semantic" role="tabpanel" hidden>
+                <header>
+                  <h2>Semantic Analysis</h2>
+                </header>
+                <div class="step-body">
+                  <pre id="semantic">{}</pre>
+                </div>
+              </article>
 
-          <article class="tab-panel" data-panel="code" role="tabpanel" hidden>
-            <header>
-              <p class="step-number">Phase 6</p>
-              <h2>Python Code Generation</h2>
-              <p class="step-note">Rule-based translation from IR to Python.</p>
-            </header>
-            <div class="step-body">
-              <pre id="code" class="code-block"></pre>
+              <article class="tab-panel" data-panel="intent" role="tabpanel" hidden>
+                <header>
+                  <h2>Intent &amp; Entity Extraction</h2>
+                </header>
+                <div class="step-body">
+                  <pre id="intent">{}</pre>
+                </div>
+              </article>
+
+              <article class="tab-panel" data-panel="ir" role="tabpanel" hidden>
+                <header>
+                  <h2>Intermediate Representation (IR)</h2>
+                </header>
+                <div class="step-body">
+                  <pre id="ir">{}</pre>
+                </div>
+              </article>
+
+              <article class="tab-panel" data-panel="code" role="tabpanel" hidden>
+                <header class="code-panel-header">
+                  <h2>Python Code Generation</h2>
+                  <div class="code-tools">
+                    <button id="copy-code" class="copy-button" type="button">Copy Code</button>
+                    <span id="copy-status" class="copy-status" aria-live="polite"></span>
+                  </div>
+                </header>
+                <div class="step-body">
+                  <pre id="code" class="code-block"></pre>
+                </div>
+              </article>
             </div>
-          </article>
-        </div>
+          </section>
+        </section>
+
+        <aside class="guide-pane">
+          <section class="guide-section">
+            <h2>Supported Commands</h2>
+            <div class="command-list">
+              <p>add 4 and 5</p>
+              <p>subtract 8 from 20</p>
+              <p>multiply 3 and 9</p>
+              <p>divide 10 by 2</p>
+              <p>print total</p>
+              <p>input name</p>
+              <p>if x greater than 5</p>
+              <p>loop 3 times</p>
+            </div>
+          </section>
+
+          <section class="guide-section">
+            <h2>Phase Examples</h2>
+            <div class="guide-grid">
+              <article class="guide-card">
+                <h3>Lexical Analysis</h3>
+                <pre>Input: add 4 and 5
+Output: KEYWORD(add), NUMBER(4), WORD(and), NUMBER(5)</pre>
+              </article>
+
+              <article class="guide-card">
+                <h3>Syntax Analysis</h3>
+                <pre>Input Tokens: KEYWORD NUMBER WORD NUMBER
+Output: matches rule ADD_NUM_NUM</pre>
+              </article>
+
+              <article class="guide-card">
+                <h3>Semantic Analysis</h3>
+                <pre>Input: rule + tokens
+Output: valid = true, message = semantic checks passed</pre>
+              </article>
+
+              <article class="guide-card">
+                <h3>Intent and Entities</h3>
+                <pre>Input: add 4 and 5
+Output: intent = add, entities = [4, 5]</pre>
+              </article>
+
+              <article class="guide-card">
+                <h3>Intermediate Representation</h3>
+                <pre>Input: add 4 and 5
+Output: {
+  "instructions": [
+    {
+      "type": "arithmetic",
+      "operation": "add",
+      "operands": [
+        "4",
+        "5"
+      ],
+      "result": "result"
+    }
+  ]
+}</pre>
+              </article>
+
+              <article class="guide-card">
+                <h3>Code Generation</h3>
+                <pre>Input: IR add operation
+Output: result = 4 + 5
+print(result)</pre>
+              </article>
+            </div>
+          </section>
+        </aside>
       </section>
     </main>
 

@@ -31,10 +31,12 @@ def generate(ir: Dict[str, object]) -> str:
             else:
                 expression = "0"
             lines.append(f"{result} = {expression}")
+            lines.append(f"print({result})")
 
         elif inst_type == "input":
             target = instruction.get("target") or "value"
             lines.append(f"{target} = input()")
+            lines.append(f"print({target})")
 
         elif inst_type == "output":
             value = instruction.get("value") or "''"
@@ -47,17 +49,17 @@ def generate(ir: Dict[str, object]) -> str:
             right = condition.get("right") or "0"
             lines.append(f"if {left} {operator} {right}:")
             lines.append("    # TODO: add statements")
-            lines.append("    pass")
+            lines.append("    print(\"Condition matched\")")
             if instruction.get("else"):
                 lines.append("else:")
                 lines.append("    # TODO: add statements")
-                lines.append("    pass")
+                lines.append("    print(\"Condition not matched\")")
 
         elif inst_type == "loop":
             count = instruction.get("count") or "0"
             lines.append(f"for _ in range({count}):")
             lines.append("    # TODO: add statements")
-            lines.append("    pass")
+            lines.append("    print(\"Loop iteration\")")
 
         else:
             lines.append("# Unsupported instruction")

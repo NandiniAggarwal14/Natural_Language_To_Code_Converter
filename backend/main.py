@@ -29,6 +29,11 @@ async def root():
     return FileResponse(FRONTEND_DIR / "index.html")
 
 
+@app.get("/guide")
+async def guide():
+    return FileResponse(FRONTEND_DIR / "guide.html")
+
+
 @app.get("/styles.css")
 async def styles():
     return FileResponse(FRONTEND_DIR / "styles.css")

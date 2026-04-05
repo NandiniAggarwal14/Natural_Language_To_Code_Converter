@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Phase Guide | Natural Language to Code Converter</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">System Documentation</p>
+          <h1>Compiler Phase Guide</h1>
+        </div>
+        <nav class="topnav" aria-label="Primary">
+          <a class="nav-link" href="/">Pipeline</a>
+          <a class="nav-link is-active" href="/guide">Phase Guide</a>
+        </nav>
+      </header>
+
+      <section class="panel guide-intro">
+        <h2>How This Project Works</h2>
+        <p>
+          This application uses a deterministic, rule-based compilation pipeline to convert
+          plain English commands into Python code. Each phase has a single responsibility:
+          tokenization, structure validation, meaning checks, intent extraction, intermediate
+          representation, and final code generation.
+        </p>
+      </section>
+
+      <section class="guide-section">
+        <h2>Phase Examples</h2>
+        <div class="guide-grid">
+          <article class="guide-card">
+            <p class="step-number">Phase 1</p>
+            <h3>Lexical Analysis</h3>
+            <pre>Input: add 4 and 5
+Output: KEYWORD(add), NUMBER(4), WORD(and), NUMBER(5)</pre>
+          </article>
+
+          <article class="guide-card">
+            <p class="step-number">Phase 2</p>
+            <h3>Syntax Analysis</h3>
+            <pre>Input Tokens: KEYWORD NUMBER WORD NUMBER
+Output: matches rule ADD_NUM_NUM</pre>
+          </article>
+
+          <article class="guide-card">
+            <p class="step-number">Phase 3</p>
+            <h3>Semantic Analysis</h3>
+            <pre>Input: rule + tokens
+Output: valid = true, message = semantic checks passed</pre>
+          </article>
+
+          <article class="guide-card">
+            <p class="step-number">Phase 4</p>
+            <h3>Intent and Entities</h3>
+            <pre>Input: add 4 and 5
+Output: intent = add, entities = [4, 5]</pre>
+          </article>
+
+          <article class="guide-card">
+            <p class="step-number">Phase 5</p>
+            <h3>Intermediate Representation</h3>
+            <pre>Input: intent and entities
+Output: { op: "add", args: [4, 5] }</pre>
+          </article>
+
+          <article class="guide-card">
+            <p class="step-number">Phase 6</p>
+            <h3>Code Generation</h3>
+            <pre>Input: IR add operation
+Output: result = 4 + 5</pre>
+          </article>
+        </div>
+      </section>
+
+      <section class="guide-section">
+        <h2>Supported Commands</h2>
+        <div class="command-list">
+          <p>add 4 and 5</p>
+          <p>subtract 8 from 20</p>
+          <p>multiply 3 and 9</p>
+          <p>divide 10 by 2</p>
+          <p>create variable total with value 99</p>
+          <p>if x greater than 5</p>
+          <p>loop 3 times</p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

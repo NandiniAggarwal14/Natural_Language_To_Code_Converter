@@ -7,10 +7,12 @@ const semanticOutput = document.getElementById("semantic");
 const intentOutput = document.getElementById("intent");
 const irOutput = document.getElementById("ir");
 const codeOutput = document.getElementById("code");
+const copyCodeButton = document.getElementById("copy-code");
+const copyStatus = document.getElementById("copy-status");
 const tabButtons = document.querySelectorAll(".tab-button");
 const tabPanels = document.querySelectorAll(".tab-panel");
 
-const API_URL = "http://127.0.0.1:8000/process";
+const API_URL = "/process";
 
 const render = (element, data) => {
   element.textContent = JSON.stringify(data, null, 2);
@@ -43,6 +45,74 @@ tabButtons.forEach((button) => {
   });
 });
 
+const selectCodeBlock = () => {
+  const selection = window.getSelection();
+  const range = document.createRange();
+  range.selectNodeContents(codeOutput);
+  selection.removeAllRanges();
+  selection.addRange(range);
+};
+
+const copyViaTextarea = (text) => {
+  const tempInput = document.createElement("textarea");
+  tempInput.value = text;
+  tempInput.setAttribute("readonly", "");
+  tempInput.style.position = "fixed";
+  tempInput.style.opacity = "0";
+  tempInput.style.pointerEvents = "none";
+  tempInput.style.top = "0";
+  tempInput.style.left = "0";
+  document.body.appendChild(tempInput);
+  tempInput.focus();
+  tempInput.select();
+  tempInput.setSelectionRange(0, tempInput.value.length);
+
+  let copied = false;
+  try {
+    copied = document.execCommand("copy");
+  } catch (error) {
+    copied = false;
+  }
+
+  document.body.removeChild(tempInput);
+  return copied;
+};
+
+const copyGeneratedCode = async (text) => {
+  if (navigator.clipboard) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (error) {
+      return copyViaTextarea(text);
+    }
+  }
+  return copyViaTextarea(text);
+};
+
+copyCodeButton.addEventListener("click", async () => {
+  const codeText = codeOutput.textContent.trim();
+  if (!codeText) {
+    copyStatus.textContent = "No code to copy.";
+    return;
+  }
+
+  try {
+    const copied = await copyGeneratedCode(codeText);
+
+    if (!copied) {
+      selectCodeBlock();
+      copyStatus.textContent = "Clipboard blocked. Press Ctrl+C to copy selected code.";
+      return;
+    }
+
+    copyStatus.textContent = "Copied.";
+  } catch (error) {
+    selectCodeBlock();
+    copyStatus.textContent = "Clipboard blocked. Press Ctrl+C to copy selected code.";
+  }
+});
+
 submitButton.addEventListener("click", async () => {
   const sentence = sentenceInput.value.trim();
   if (!sentence) {
@@ -53,6 +123,7 @@ submitButton.addEventListener("click", async () => {
     render(intentOutput, {});
     render(irOutput, {});
     codeOutput.textContent = "";
+    copyStatus.textContent = "";
     return;
   }
 
@@ -75,11 +146,13 @@ submitButton.addEventListener("click", async () => {
     render(intentOutput, { intent: data.intent, entities: data.entities });
     render(irOutput, data.ir);
     codeOutput.textContent = data.code || "";
+    copyStatus.textContent = "";
   } catch (error) {
     render(syntaxOutput, { valid: false, message: error.message });
     render(semanticOutput, {});
     render(intentOutput, {});
     render(irOutput, {});
     codeOutput.textContent = "";
+    copyStatus.textContent = "";
   }
 });
