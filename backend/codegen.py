@@ -6,6 +6,8 @@ ARITHMETIC_OPERATORS = {
     "subtract": "-",
     "multiply": "*",
     "divide": "/",
+    "modulo": "%",
+    "power": "**",
 }
 
 
@@ -33,6 +35,35 @@ def generate(ir: Dict[str, object]) -> str:
             lines.append(f"{result} = {expression}")
             lines.append(f"print({result})")
 
+        elif inst_type == "assignment":
+            target = instruction.get("target") or "value"
+            value = instruction.get("value") or "0"
+            lines.append(f"{target} = {value}")
+            lines.append(f"print({target})")
+
+        elif inst_type == "increment":
+            target = instruction.get("target") or "value"
+            lines.append(f"{target} += 1")
+            lines.append(f"print({target})")
+
+        elif inst_type == "decrement":
+            target = instruction.get("target") or "value"
+            lines.append(f"{target} -= 1")
+            lines.append(f"print({target})")
+
+        elif inst_type == "minmax":
+            function = instruction.get("function") or "min"
+            operands = instruction.get("operands", [])
+            result = instruction.get("result", "result")
+            if len(operands) >= 2:
+                expression = f"{function}({operands[0]}, {operands[1]})"
+            elif len(operands) == 1:
+                expression = f"{function}({operands[0]}, 0)"
+            else:
+                expression = f"{function}(0, 0)"
+            lines.append(f"{result} = {expression}")
+            lines.append(f"print({result})")
+
         elif inst_type == "input":
             target = instruction.get("target") or "value"
             lines.append(f"{target} = input()")
@@ -48,12 +79,47 @@ def generate(ir: Dict[str, object]) -> str:
             operator = condition.get("operator") or ">"
             right = condition.get("right") or "0"
             lines.append(f"if {left} {operator} {right}:")
-            lines.append("    # TODO: add statements")
-            lines.append("    print(\"Condition matched\")")
-            if instruction.get("else"):
+            if instruction.get("then_action") == "print":
+                then_value = instruction.get("then_value") or "''"
+                lines.append(f"    print({then_value})")
+            else:
+                lines.append("    # TODO: add statements")
+                lines.append("    print(\"Condition matched\")")
+            if instruction.get("else_action") == "print":
+                else_value = instruction.get("else_value") or "''"
+                lines.append("else:")
+                lines.append(f"    print({else_value})")
+            elif instruction.get("else"):
                 lines.append("else:")
                 lines.append("    # TODO: add statements")
                 lines.append("    print(\"Condition not matched\")")
+
+        elif inst_type == "conditional_compound":
+            conditions = instruction.get("conditions", [])
+            logical = instruction.get("logical") or "and"
+            parts = []
+            for condition in conditions:
+                left = condition.get("left") or "x"
+                operator = condition.get("operator") or "=="
+                right = condition.get("right") or "0"
+                parts.append(f"{left} {operator} {right}")
+            condition_expr = f" {logical} ".join(parts) if parts else "False"
+            lines.append(f"if {condition_expr}:")
+            if instruction.get("then_action") == "print":
+                then_value = instruction.get("then_value") or "''"
+                lines.append(f"    print({then_value})")
+            else:
+                lines.append("    # TODO: add statements")
+                lines.append("    print(\"Condition matched\")")
+
+        elif inst_type == "while":
+            condition = instruction.get("condition", {})
+            left = condition.get("left") or "x"
+            operator = condition.get("operator") or ">"
+            right = condition.get("right") or "0"
+            lines.append(f"while {left} {operator} {right}:")
+            lines.append("    # TODO: add statements")
+            lines.append("    print(\"Loop iteration\")")
 
         elif inst_type == "loop":
             count = instruction.get("count") or "0"

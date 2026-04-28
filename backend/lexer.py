@@ -7,11 +7,21 @@ KEYWORDS = {
     "subtract",
     "multiply",
     "divide",
+    "modulo",
+    "power",
     "print",
     "input",
     "if",
     "else",
+    "begin",
+    "end",
+    "while",
     "loop",
+    "set",
+    "increment",
+    "decrement",
+    "minimum",
+    "maximum",
 }
 
 WORDS = {
@@ -20,13 +30,21 @@ WORDS = {
     "by",
     "greater",
     "than",
+    "less",
+    "equal",
+    "is",
+    "not",
+    "or",
+    "to",
+    "of",
+    "then",
     "times",
 }
 
 
 def preprocess(text: str) -> str:
     lowered = text.lower()
-    cleaned = re.sub(r"[^\w\s]", "", lowered)
+    cleaned = re.sub(r"[^\w\s-]", "", lowered)
     return cleaned
 
 
@@ -35,7 +53,7 @@ def classify_token(token: str) -> str:
         return "KEYWORD"
     if token in WORDS:
         return "WORD"
-    if re.fullmatch(r"\d+", token):
+    if re.fullmatch(r"-?\d+", token):
         return "NUMBER"
     if re.fullmatch(r"[a-z_][a-z0-9_]*", token):
         return "IDENTIFIER"
